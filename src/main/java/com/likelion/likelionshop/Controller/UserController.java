@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j //로그 출력을 도와주는 어노테이션
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     // 1. 사용자를 생성하는 컨트롤러를 만듭니다.
