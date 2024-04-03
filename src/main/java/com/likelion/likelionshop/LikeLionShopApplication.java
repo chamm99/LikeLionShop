@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LikeLionShopApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(LikeLionShopApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(LikeLionShopApplication.class, args);
+	}
 
 }
