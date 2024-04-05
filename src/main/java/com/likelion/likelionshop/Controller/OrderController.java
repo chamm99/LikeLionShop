@@ -2,11 +2,12 @@ package com.likelion.likelionshop.Controller;
 
 import com.likelion.likelionshop.Dto.CreateOrderRequestDto;
 import com.likelion.likelionshop.Dto.UpdateOrderRequestDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/order") // uri가 http://~/user로 시작하는 요청을 받습니다.
 public class OrderController {
@@ -33,9 +34,11 @@ public class OrderController {
     }
 
     // 4. 주문을 삭제하는 컨트롤러를 만듭니다. 이때 return 값은 "주문 삭제하기"입니다.
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{name}")
     public String deleteOrder(
-            @RequestBody UpdateOrderRequestDto requestDto) {
+            @RequestBody UpdateOrderRequestDto requestDto,
+            @PathVariable String name) {
+        log.info(name);
         return "주문 삭제하기";
     }
 
