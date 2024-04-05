@@ -13,7 +13,7 @@ public class UserController {
 
     // 1. 사용자를 생성하는 컨트롤러를 만듭니다.
     // 이때 log.info를 이용하여 사용자의 이름, 주소, ID, PW를 출력해줍니다. return 값은 "사용자 생성"입니다.
-    @PostMapping("/post")
+    @PostMapping("")
     public String createUser(
             @RequestBody CreateUserRequestDto requestDto) {
         log.info(requestDto.getName());
@@ -27,9 +27,8 @@ public class UserController {
     // 이때 log.info를 이용하여 사용자의 ID를 출력해줍니다. return 값은 "사용자 조회"입니다.
     @GetMapping("/{id}")
     public String getUser(
-            @RequestBody CreateUserRequestDto requestDto,
-            @PathVariable long id) {
-        log.info(String.valueOf(id));
+            @PathVariable String id) {
+        log.info(id);
         return "사용자 조회";
     }
 
@@ -47,9 +46,8 @@ public class UserController {
     // 이때 log.info 이용하여 사용자의 ID를 출력해줍니다. return 값은 "사용자 삭제"입니다.
     @DeleteMapping("/{id}")
     public String deleteUser(
-            @RequestBody CreateUserRequestDto requestDto,
-            @PathVariable long id) {
-        log.info(String.valueOf(id));
+            @PathVariable String id) {
+        log.info(id);
         return "사용자 삭제";
     }
 
