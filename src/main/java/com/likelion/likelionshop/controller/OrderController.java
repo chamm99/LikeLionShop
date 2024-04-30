@@ -29,28 +29,28 @@ public class OrderController {
     }
 
     // 2. 주문을 가져오는 컨트롤러를 만듭니다. 이때 return 값은 "주문 가져오기"입니다.
-    @GetMapping("/{id}")
-    public OrderResponseDto getOrder(@PathVariable Long id) {
-        OrderResponseDto orderResponse = orderService.getOrder(id);
+    @GetMapping("/{orderId}")
+    public OrderResponseDto getOrder(@PathVariable Long orderId) {
+        OrderResponseDto orderResponse = orderService.getOrder(orderId);
         log.info(orderResponse.toString());
         return orderResponse;
     }
 
     // 3. 주문을 수정하는 컨트롤러를 만듭니다. 이때 return 값은 "주문 수정하기"입니다.
-    @PutMapping("/{id}")
+    @PutMapping("/{orderId}")
     public OrderResponseDto updateOrder(
             @RequestBody UpdateOrderRequestDto requestDto,
-            @PathVariable Long id) {
-        OrderResponseDto orderResponse = orderService.updateOrder(requestDto, id);
+            @PathVariable Long orderId) {
+        OrderResponseDto orderResponse = orderService.updateOrder(requestDto, orderId);
         log.info(orderResponse.toString());
         return orderResponse;
     }
 
     // 4. 주문을 삭제하는 컨트롤러를 만듭니다. 이때 return 값은 "주문 삭제하기"입니다.
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{orderId}")
     public String deleteOrder(
-            @PathVariable Long id) {
-        orderService.deleteOrder(id);
+            @PathVariable Long orderId) {
+        orderService.deleteOrder(orderId);
         return "주문 삭제하기";
     }
 

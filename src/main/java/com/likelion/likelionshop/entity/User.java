@@ -1,5 +1,6 @@
 package com.likelion.likelionshop.entity;
 
+import com.likelion.likelionshop.dto.request.UpdateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,9 +31,9 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    public void update(Long id, String name, String address) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
+    public void update(UpdateUserRequestDto updateUserRequestDto) {
+        id = updateUserRequestDto.getId();
+        name = updateUserRequestDto.getName();
+        address = updateUserRequestDto.getAddress();
     }
 }

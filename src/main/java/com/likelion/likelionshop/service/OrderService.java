@@ -29,13 +29,14 @@ public class OrderService {
     @Transactional
     public OrderResponseDto updateOrder(UpdateOrderRequestDto request, Long orderId) {
         Order order = request.toEntity();
+        order.update(request);
+        //orderRepository.save(order);
         return OrderResponseDto.from(order);
     }
 
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long id) {
         Order order = null;
-        order.update(id, id+"번째 주문", (int) (id*2), (int) (id*1000));
         //order = orderRepository.findById(id);
         return OrderResponseDto.from(order);
     }

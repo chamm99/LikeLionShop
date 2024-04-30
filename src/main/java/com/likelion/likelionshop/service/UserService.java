@@ -23,7 +23,7 @@ public class UserService {
     @Transactional
     public UserResponseDto updateUser(UpdateUserRequestDto request, Long id) {
         User user = request.toEntity();
-        user.update(id, request.getName(), request.getAddress());
+        user.update(request);
         //userRepository.save(user);
         return UserResponseDto.from(user);
     }
@@ -32,7 +32,6 @@ public class UserService {
     public UserResponseDto getUser(Long id) {
         User user = null;
         //user = userRepository.findById(id);
-        user.update(id, id+"번째 유저", id+"번째 유저의 주소");
         return UserResponseDto.from(user);
     }
 

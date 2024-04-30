@@ -1,5 +1,6 @@
 package com.likelion.likelionshop.entity;
 
+import com.likelion.likelionshop.dto.request.UpdateOrderRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,9 @@ public class Order {
     @Column(name = "price")
     public int price;
 
-    public void update(Long id, String name, int quantity, int price) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
+    public void update(UpdateOrderRequestDto updateOrderRequestDto) {
+        name = updateOrderRequestDto.getName();
+        quantity = updateOrderRequestDto.getQuantity();
+        price = updateOrderRequestDto.getPrice();
     }
 }
