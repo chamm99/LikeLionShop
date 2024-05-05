@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UpdateOrderRequestDto {
 
+    public Long id;
+
     //상품 이름
     public String name;
 
@@ -23,6 +25,7 @@ public class UpdateOrderRequestDto {
 
     public Order toEntity() {
         return Order.builder()
+                .id(id)
                 .name(name)
                 .quantity(quantity)
                 .price(price)

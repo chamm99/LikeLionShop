@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Getter
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -27,6 +27,10 @@ public class Order {
 
     @Column(name = "price")
     public int price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void update(UpdateOrderRequestDto updateOrderRequestDto) {
         name = updateOrderRequestDto.getName();

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,5 +30,9 @@ public class OrderResponseDto {
                 .quantity(order.getQuantity())
                 .price(order.getPrice())
                 .build();
+    }
+
+    public static List<OrderResponseDto> from(List<Order> orders) {
+        return orders.stream().map(OrderResponseDto::from).collect(Collectors.toList());
     }
 }

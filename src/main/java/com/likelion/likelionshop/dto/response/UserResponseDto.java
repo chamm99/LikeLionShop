@@ -22,9 +22,10 @@ public class UserResponseDto {
 
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
-        //        .id(user.getId())
+                .id(user.getId())
                 .name(user.getName())
                 .address(user.getAddress())
+                .loginId(user.getLoginId())
                 .build();
     }
 }
