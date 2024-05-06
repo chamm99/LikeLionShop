@@ -18,10 +18,11 @@ public class OrderController {
     private final OrderService orderService;
 
     // 1. 주문을 생성하는 컨트롤러를 만듭니다. 이때 return 값은 "주문 생성하기"입니다. -> 주문은 리스트 형태로 요청을 보내주세요!
-    @PostMapping("")
+    @PostMapping("/{userId}")
     public List<OrderResponseDto> createOrder(
+            @PathVariable Long userId,
             @RequestBody List<CreateOrderRequestDto> requestDtoList) {
-        List<OrderResponseDto> orderResponses = orderService.createOrders(requestDtoList);
+        List<OrderResponseDto> orderResponses = orderService.createOrders(userId, requestDtoList);
         for (OrderResponseDto orderResponse : orderResponses) {
             log.info(orderResponse.toString());
         }

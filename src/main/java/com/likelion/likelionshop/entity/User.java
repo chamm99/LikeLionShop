@@ -32,8 +32,9 @@ public class User {
     private String address;
 
     public void update(UpdateUserRequestDto updateUserRequestDto) {
-        id = updateUserRequestDto.getId();
         name = updateUserRequestDto.getName();
         address = updateUserRequestDto.getAddress();
+        loginId = updateUserRequestDto.getLoginId();
+        password = updateUserRequestDto.getPassword();
     }
 }
