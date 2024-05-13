@@ -1,52 +1,76 @@
 package com.likelion.likelionshop.service;
 
 import com.likelion.likelionshop.dto.request.CreateOrderRequestDto;
-import com.likelion.likelionshop.dto.request.UpdateOrderRequestDto;
 import com.likelion.likelionshop.dto.response.OrderResponseDto;
+import com.likelion.likelionshop.dto.request.UpdateOrderRequestDto;
 import com.likelion.likelionshop.entity.Order;
+import com.likelion.likelionshop.entity.User;
 import com.likelion.likelionshop.repository.OrderRepository;
 import com.likelion.likelionshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-
     @Transactional
-    public List<OrderResponseDto> createOrders(Long userId, List<CreateOrderRequestDto> requests) {
-        List<Order> orders = new ArrayList<>();
-        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
-        for (CreateOrderRequestDto request : requests) {
-            Order savedOrder = orderRepository.save(request.toEntity());
-            orders.add(savedOrder);
+    public List<OrderResponseDto> createOrder(String email, List<CreateOrderRequestDto> requests) {
+        List<Order> createdOrders = new ArrayList<>();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+        for (CreateOrderRequestDto requestDto : requests) {
+
+            String name = requestDto.getName();
+            double price = requestDto.getPrice();
+            int quantity = requestDto.getQuantity();
+            Order order = requestDto.toEntity();
+            order.setUser(user);
+            Order savedOrder = orderRepository.save(order);
+            createdOrders.add(savedOrder);
         }
-        return OrderResponseDto.from(orders);
+        return OrderResponseDto.from(createdOrders);
     }
 
+    public OrderResponseDto getOrder(String email, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("상품이 존재하지 않습니다."));
+
+//        if (!order.getUser().getEmail().equals(email)) {
+//            throw new SecurityException("권한이 없습니다.");
+//        }
+
+        return OrderResponseDto.from(order);
+
+    }
+
+    public List<OrderResponseDto> getOrders(String email) {
+        return orderRepository.findAllByUser_Email(email).stream()
+                .map(OrderResponseDto::from)
+                .toList();
+    }
+
+
     @Transactional
-    public OrderResponseDto updateOrder(UpdateOrderRequestDto request, Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
-        order.update(request);
+    public void deleteOrder(Long orderId) {
+        try {
+            orderRepository.deleteById(orderId);
+
+        } catch (IllegalArgumentException exception) {
+            log.error("Invalid Parameter", exception);
+        }
+    }
+    @Transactional
+    public OrderResponseDto updateOrder(UpdateOrderRequestDto updateOrderRequestDto) {
+        Long orderId = updateOrderRequestDto.getId();
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("상품이 존재하지 않습니다."));
+        order.update(updateOrderRequestDto);
         orderRepository.save(order);
         return OrderResponseDto.from(order);
-    }
-
-    @Transactional(readOnly = true)
-    public OrderResponseDto getOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
-        return OrderResponseDto.from(order);
-    }
-
-    @Transactional
-    public void deleteOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
-        orderRepository.delete(order);
     }
 }

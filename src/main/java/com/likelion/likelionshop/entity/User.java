@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -22,8 +24,8 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "login_id")
-    private String loginId;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
@@ -31,10 +33,17 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "roles")
+    private String roles;
+
+    @Column
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
+
     public void update(UpdateUserRequestDto updateUserRequestDto) {
         name = updateUserRequestDto.getName();
         address = updateUserRequestDto.getAddress();
-        loginId = updateUserRequestDto.getLoginId();
+        email = updateUserRequestDto.getEmail();
         password = updateUserRequestDto.getPassword();
     }
 }
