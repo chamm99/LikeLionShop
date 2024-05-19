@@ -18,14 +18,14 @@ public class UserResponseDto {
 
     public String address;
 
-    public String loginId;
+    public String email;
 
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .address(user.getAddress())
-                .loginId(user.getLoginId())
+                .email(user.getEmail())
                 .build();
     }
 }

@@ -14,7 +14,7 @@ public class UpdateUserRequestDto {
 
     public String address;
 
-    public String loginId;
+    public String email;
 
     public String password;
 
@@ -22,7 +22,7 @@ public class UpdateUserRequestDto {
         return User.builder()
                 .name(name)
                 .address(address)
-                .loginId(loginId)
+                .email(email)
                 .password(password)
                 .build();
     }
