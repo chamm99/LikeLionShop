@@ -2,6 +2,7 @@ package com.likelion.likelionshop.global.filter;
 
 import com.likelion.likelionshop.userDetails.CustomUserDetails;
 import com.likelion.likelionshop.utils.JwtUtil;
+import com.likelion.likelionshop.utils.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-//    private final RedisUtil redisUtil;
+    private final RedisUtil redisUtil;
 
     @Override
     protected void doFilterInternal(
@@ -45,11 +46,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
             // logout 처리된 accessToken -> 원래는 Redis 에서 해당 토큰이 logout 처리됐는지 검사함, 우리는 Redis 를 다루지 않을 것임.
-//            if (redisUtil.get(accessToken) != null && redisUtil.get(accessToken).equals("logout")) {
-//                logger.info("[*] Logout accessToken");
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
+            if (redisUtil.get(accessToken) != null && redisUtil.get(accessToken).equals("logout")) {
+                logger.info("[*] Logout accessToken");
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             authenticateAccessToken(accessToken);
             log.info("[ JwtAuthorizationFilter ] 종료. 다음 필터로 넘어갑니다.");

@@ -2,10 +2,13 @@ package com.likelion.likelionshop.config;
 
 import com.likelion.likelionshop.global.filter.CustomLoginFilter;
 import com.likelion.likelionshop.global.filter.JwtAuthorizationFilter;
+import com.likelion.likelionshop.utils.HttpResponseUtil;
 import com.likelion.likelionshop.utils.JwtUtil;
+import com.likelion.likelionshop.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +26,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
     //인증이 필요하지 않은 url
     private final String[] allowedUrls = {
@@ -90,7 +94,7 @@ public class SecurityConfig {
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         // login filter 전에 Auth Filter 등록
         http
-                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil), CustomLoginFilter.class);
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, redisUtil), CustomLoginFilter.class);
 
 
         // JwtException 에 대한 Custom Exception 처리, 다루지 않음.
@@ -98,18 +102,18 @@ public class SecurityConfig {
 //                .addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class);
 
         // Logout Filter (Redis 를 이용한 Logout 처리 , 다루지 않음)
-//        http
-//                .logout(logout -> logout
-//                        .logoutUrl("/api/v1/organizations/logout")
-//                        .addLogoutHandler(new CustomLogoutHandler(redisUtil, jwtUtil))
-//                        .logoutSuccessHandler((request, response, authentication) ->
-//                                HttpResponseUtil.setSuccessResponse(
-//                                        response,
-//                                        HttpStatus.OK,
-//                                        "로그아웃 성공"
-//                                )
-//                        )
-//                );
+        http
+                .logout(logout -> logout
+                        .logoutUrl("/api/v1/organizations/logout")
+                        .addLogoutHandler(new CustomLogoutHandler(redisUtil, jwtUtil))
+                        .logoutSuccessHandler((request, response, authentication) ->
+                                HttpResponseUtil.setSuccessResponse(
+                                        response,
+                                        HttpStatus.OK,
+                                        "로그아웃 성공"
+                                )
+                        )
+                );
 
         return http.build();
     }
