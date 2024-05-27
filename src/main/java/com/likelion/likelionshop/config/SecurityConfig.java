@@ -1,6 +1,7 @@
 package com.likelion.likelionshop.config;
 
 import com.likelion.likelionshop.global.filter.CustomLoginFilter;
+import com.likelion.likelionshop.global.filter.CustomLogoutFilter;
 import com.likelion.likelionshop.global.filter.JwtAuthorizationFilter;
 import com.likelion.likelionshop.utils.HttpResponseUtil;
 import com.likelion.likelionshop.utils.JwtUtil;
@@ -105,7 +106,7 @@ public class SecurityConfig {
         http
                 .logout(logout -> logout
                         .logoutUrl("/api/v1/organizations/logout")
-                        .addLogoutHandler(new CustomLogoutHandler(redisUtil, jwtUtil))
+                        .addLogoutHandler(new CustomLogoutFilter(redisUtil, jwtUtil))
                         .logoutSuccessHandler((request, response, authentication) ->
                                 HttpResponseUtil.setSuccessResponse(
                                         response,
