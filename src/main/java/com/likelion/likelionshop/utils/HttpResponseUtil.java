@@ -1,6 +1,7 @@
 package com.likelion.likelionshop.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.likelion.likelionshop.global.common.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
