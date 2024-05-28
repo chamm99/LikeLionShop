@@ -2,7 +2,7 @@ name: Java CI/CD with Gradle
 
 on:
   push:
-    branches: [ "5주차" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -50,7 +50,19 @@ jobs:
           port: ${{ secrets.EC2_SSH_PORT }}
           timeout: 60s
           script: |
-            sudo docker stop ${{ secrets.DOCKERHUB_IMAGENAME }}
-            sudo docker rm ${{ secrets.DOCKERHUB_IMAGENAME }}
+            # Stop and remove existing application container
+            sudo docker stop ${{ secrets.DOCKERHUB_IMAGENAME }} || true
+            sudo docker rm ${{ secrets.DOCKERHUB_IMAGENAME }} || true
+            
+            # Pull new image from Docker Hub
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME }}
-            sudo docker run -it -d -p 8080:8080 --name ${{ secrets.DOCKERHUB_IMAGENAME }} -e TZ=Asia/Seoul ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME }}
+            
+            # Stop and remove existing Redis container
+            sudo docker stop redis || true
+            sudo docker rm redis || true
+
+            # Run Redis container
+            sudo docker run -d --name redis -p 6379:6379 redis:latest
+
+            # Run new application container
+            sudo docker run -it -d -p 8080:8080 --name ${{ secrets.DOCKERHUB_IMAGENAME }} --link redis:redis -e TZ=Asia/Seoul ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME }}
